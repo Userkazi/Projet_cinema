@@ -1,0 +1,15 @@
+body {
+    background: black;
+    color: white;
+    text-align: center;
+}
+button {
+    background-color: darkblue;
+    color: white;
+    border: 1px solid white;
+}
+button.gros {
+    margin: 10px;
+    font-size: medium;
+    height: 40px;
+}

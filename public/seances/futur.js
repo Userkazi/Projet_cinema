@@ -6,6 +6,7 @@ function creerBouton(id) {
     return bouton;
 }
 const tableau = document.getElementById("seances");
+const retour = document.getElementById(`retour`);
 document.addEventListener("DOMContentLoaded", async () => {
     const msg = document.getElementById(`msg`);
     msg.textContent = `Chargement des séances`;
@@ -47,4 +48,5 @@ tableau.addEventListener("click", async (event) => {
             alert("La suppression n'a pas pu être effectuée.");
         }
     }
-})
+});
+retour.addEventListener("click", () => location.href = "/seances");

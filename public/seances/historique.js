@@ -1,3 +1,4 @@
+const retour = document.getElementById(`retour`);
 document.addEventListener("DOMContentLoaded", async () => {
     const tableau = document.getElementById("seances");
     const msg = document.getElementById(`msg`);
@@ -23,4 +24,5 @@ document.addEventListener("DOMContentLoaded", async () => {
         tableau.append(tr);
     }
     msg.textContent = "";
-})
+});
+retour.addEventListener("click", () => location.href = "/seances");

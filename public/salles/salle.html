@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+   <link rel="stylesheet" href="cinema.css">
+    <title>Gestion des salles</title>
+</head>
+<body>
+
+<h1>Gestion des salles</h1>
+
+<input id="nom" placeholder="Nom de la salle"><br><br>
+<input id="capacite_totale" placeholder="Capacité totale"><br><br>
+
+<button id="ajouter">Ajouter</button>
+<button id="afficher">Afficher</button>
+
+<div id="liste"></div>
+
+<script>
+document.getElementById("ajouter").addEventListener("click", ajouterSalle);
+document.getElementById("afficher").addEventListener("click", chargerSalles);
+
+function chargerSalles() {
+    fetch("/salles")
+        .then(res => res.json())
+        .then(salles => {
+            let html = "<table border='1' align='center'>";
+            html += "<tr><th>Nom</th><th>Capacité</th><th>Action</th></tr>";
+
+            salles.forEach(s => {
+                html += `
+                <tr>
+                    <td>${s.nom}</td>
+                    <td>${s.capacite_totale}</td>
+                    <td><button onclick="supprimerSalle(${s.id})">X</button></td>
+                </tr>`;
+            });
+
+            html += "</table>";
+            document.getElementById("liste").innerHTML = html;
+        })
+        .catch(err => console.log(err));
+}
+
+function ajouterSalle() {
+    const nom = document.getElementById("nom").value;
+    const capacite_totale = document.getElementById("capacite_totale").value;
+
+    fetch("/salles", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            nom: nom,
+            capacite_totale: capacite_totale
+        })
+    })
+    .then(res => res.text())
+    .then(data => {
+        console.log(data);
+        chargerSalles();
+    })
+    .catch(err => console.log(err));
+}
+
+function supprimerSalle(id) {
+    fetch("/salles/" + id, {
+        method: "DELETE"
+    })
+    .then(() => chargerSalles())
+    .catch(err => console.log(err));
+}
+</script>
+
+</body>
+</html>

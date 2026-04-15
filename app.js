@@ -4,12 +4,14 @@ const app = express();
 const port = process.env.PORT||3000;
 
 const seances = require("./routes/seancesRoutes");
+const reserver = require("./routes/reserverRoutes");
 
 
 
 app.use(express.json());
 app.use(express.static("public"));
 app.use("/seances", seances);
+app.use("/reserver", reserver);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode||500;

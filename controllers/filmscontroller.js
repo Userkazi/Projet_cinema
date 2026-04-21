@@ -10,17 +10,9 @@ const pageIntrouvable = ((err, next) => {
 
 const chemin = path.join(__dirname, "../public/films");
 
-function pageCreer(req, res, next) {
-    try {
-        res.sendFile(path.join(chemin, "creer.html"), (err) => pageIntrouvable(err, next));
-    } catch (err) {
-        next(err);
-    }
-}
-
 function pageGestion(req, res, next) {
     try {
-        res.sendFile(path.join(chemin, "gestion.html"), (err) => pageIntrouvable(err, next));
+        res.sendFile(path.join(chemin, "film.html"), (err) => pageIntrouvable(err, next));
     } catch (err) {
         next(err);
     }
@@ -37,17 +29,18 @@ async function listeFilms(req, res, next) {
 
 async function creer(req, res, next) {
     try {
-        let { titre, resume, duree } = req.body;
+        let { titre, resume, duree, affiche_url, id_categorie, classification } = req.body;
 
-        if (!titre || !resume || !duree) {
+        if (!titre || !resume || !duree || !affiche_url || !id_categorie || !classification) {
             throw new HttpError(400, "Tous les champs doivent être remplis.");
         }
 
         duree = parseInt(duree);
+        id_categorie = parseInt(id_categorie);
 
         await pool.query(
-            "INSERT INTO films (titre, resume, duree) VALUES (?, ?, ?)",
-            [titre, resume, duree]
+            "INSERT INTO films (titre, resume, duree, affiche_url, id_categorie, classification) VALUES (?, ?, ?, ?, ?, ?)",
+            [titre, resume, duree, affiche_url, id_categorie, classification]
         );
 
         res.status(201).json({ message: "Film créé avec succès." });
@@ -61,8 +54,7 @@ async function supprimer(req, res, next) {
         const id = parseInt(req.body.id);
 
         await pool.query(
-            `DELETE FROM films
-             WHERE id = ?`,
+            "DELETE FROM films WHERE id = ?",
             [id]
         );
 
@@ -72,4 +64,4 @@ async function supprimer(req, res, next) {
     }
 }
 
-module.exports = { pageGestion, pageCreer, listeFilms, creer, supprimer };
+module.exports = { pageGestion, listeFilms, creer, supprimer };

@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-   <link rel="stylesheet" href="cinema.css">
+    <link rel="stylesheet" href="cinema.css">
     <title>Gestion des films</title>
 </head>
 <body>
@@ -11,13 +11,34 @@
 
 <form id="creerFilm">
     <label for="titre">Titre</label><br>
-    <input id="titre" name="titre" type="text" required><br><br>
+    <input id="titre" name="titre" type="text"><br><br>
 
     <label for="resume">Résumé</label><br>
-    <input id="resume" name="resume" type="text" required><br><br>
+    <input id="resume" name="resume" type="text"><br><br>
 
     <label for="duree">Durée</label><br>
-    <input id="duree" name="duree" type="number" required><br><br>
+    <input id="duree" name="duree" type="text"><br><br>
+
+    <label for="affiche_url">URL de l'affiche</label><br>
+    <input id="affiche_url" name="affiche_url" type="text"><br><br>
+
+    <label for="id_categorie">Catégorie</label><br>
+    <select id="id_categorie" name="id_categorie">
+        <option value="">Choisir</option>
+        <option value="1">Action</option>
+        <option value="2">Comédie</option>
+        <option value="3">Drame</option>
+        <option value="4">Science-Fiction</option>
+    </select><br><br>
+
+    <label for="classification">Classification</label><br>
+    <select id="classification" name="classification">
+        <option value="">Choisir</option>
+        <option value="Tout public">Tout public</option>
+        <option value="12+">12+</option>
+        <option value="16+">16+</option>
+        <option value="18+">18+</option>
+    </select><br><br>
 
     <input type="submit" value="Créer">
 </form>

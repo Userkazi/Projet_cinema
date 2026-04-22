@@ -3,73 +3,35 @@ const afficher = document.getElementById("afficher");
 const msg = document.getElementById("msg");
 const liste = document.getElementById("liste");
 
-async function chargerSalles() {
-    try {
-        msg.textContent = "Chargement des salles...";
-
-        const response = await fetch("/salles/liste");
-        const salles = await response.json();
-
-        if (salles.message) {
-            msg.textContent = salles.message;
-            return;
-        }
-
-        let html = "<table border='1' align='center'>";
-        html += "<tr><th>ID</th><th>Nom</th><th>Capacité</th><th>Action</th></tr>";
-
-        for (let i = 0; i < salles.length; i++) {
-            html += `
-                <tr>
-                    <td>${salles[i].id}</td>
-                    <td>${salles[i].nom}</td>
-                    <td>${salles[i].capacite_totale}</td>
-                    <td>
-                        <button onclick="supprimerSalle(${salles[i].id})">Supprimer</button>
-                    </td>
-                </tr>
-            `;
-        }
-
-        html += "</table>";
-        liste.innerHTML = html;
-        msg.textContent = "";
-
-    } catch (err) {
-        msg.textContent = "Erreur lors du chargement.";
-    }
-}
-
 form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    msg.textContent = "Soumission en cours...";
+    let data = new FormData(event.target);
+    data = Object.fromEntries(data);
 
-    let formData = new FormData(event.target);
-    formData = Object.fromEntries(formData);
-
-    if (!formData.nom || !formData.capacite_totale) {
-        msg.textContent = "Tous les champs doivent être remplis.";
+    if (data.nom === "" || data.rangees === "" || data.sieges === "") {
+        msg.textContent = "Remplis tous les champs";
         return;
     }
 
-    if (isNaN(formData.capacite_totale)) {
-        msg.textContent = "La capacité doit être un nombre.";
+    if (isNaN(data.rangees) || isNaN(data.sieges)) {
+        msg.textContent = "Doit être des nombres";
         return;
     }
 
-    formData.capacite_totale = parseInt(formData.capacite_totale);
+    data.rangees = parseInt(data.rangees);
+    data.sieges = parseInt(data.sieges);
 
     const response = await fetch("/salles/creer", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(data)
     });
 
-    const reponse = await response.json();
-    msg.textContent = reponse.message;
+    const rep = await response.json();
+    msg.textContent = rep.message;
 
     if (response.status === 201) {
         form.reset();
@@ -77,22 +39,25 @@ form.addEventListener("submit", async (event) => {
     }
 });
 
-async function supprimerSalle(id) {
-    const response = await fetch("/salles/supprimer", {
-        method: "DELETE",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ id: id })
-    });
+async function chargerSalles() {
+    const response = await fetch("/salles/liste");
+    const salles = await response.json();
 
-    if (response.status === 204) {
-        msg.textContent = "Salle supprimée.";
-        chargerSalles();
-    } else {
-        const reponse = await response.json();
-        msg.textContent = reponse.message;
+    let html = "<table border='1'>";
+    html += "<tr><th>ID</th><th>Nom</th><th>Capacité</th></tr>";
+
+    for (let i = 0; i < salles.length; i++) {
+        html += `
+        <tr>
+            <td>${salles[i].id}</td>
+            <td>${salles[i].nom}</td>
+            <td>${salles[i].capacite_totale}</td>
+        </tr>
+        `;
     }
+
+    html += "</table>";
+    liste.innerHTML = html;
 }
 
 afficher.addEventListener("click", chargerSalles);

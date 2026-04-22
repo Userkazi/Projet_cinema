@@ -2,25 +2,30 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-   <link rel="stylesheet" href="cinema.css">
+    <link rel="stylesheet" href="cinema.css">
     <title>Gestion des salles</title>
 </head>
 <body>
 
 <h1>Gestion des salles</h1>
 
-<form id="creerSalle">
-    <label for="nom">Nom</label><br>
-    <input id="nom" name="nom" type="text" required><br><br>
+<form id="creerSalle" novalidate>
 
-    <label for="capacite_totale">Capacité</label><br>
-    <input id="capacite_totale" name="capacite_totale" type="text" required><br><br>
+    <p>Nom</p>
+    <input id="nom" name="nom" type="text"><br><br>
 
-    <input type="submit" value="Créer">
+    <p>Nombre de rangées</p>
+    <input id="rangees" name="rangees" type="text"><br><br>
+
+    <p>Sièges par rangée</p>
+    <input id="sieges" name="sieges" type="text"><br><br>
+
+    <button type="submit">Créer</button>
+
 </form>
 
 <br>
-<button id="afficher" class="gros" type="button">Afficher les salles</button>
+<button id="afficher">Afficher les salles</button>
 
 <p id="msg"></p>
 <div id="liste"></div>

@@ -16,8 +16,15 @@ function pageChoixSeance(req, res, next) {
         next(err);
     }
 }
+function pageChoixSieges(req, res, next) {
+    try {
+        res.sendFile(path.join(chemin,  "choixSieges.html"), (err) => pageIntrouvable(err, next));
+    }catch (err) {
+        next(err);
+    }
+}
 
-
+//lister les séances disponibles pour un film
 async function listeSeances(req, res, next) {
     try {
         const film = parseInt(req.params.filmId);
@@ -42,4 +49,47 @@ async function listeSeances(req, res, next) {
     }
 }
 
-module.exports = {pageChoixSeance, listeSeances};
+//Lister les sièges
+async function listeSieges(req,res, next) {
+    try {
+        const seanceId = parseInt(req.params.seanceId);
+        const [sieges] = await pool.query(`
+            SELECT sieges.id as id, sieges.rangee as rangee, sieges.numero as numero
+            FROM sieges
+            INNER JOIN salles ON salles.id = sieges.id_salle
+            INNER JOIN seances ON seances.id_salle = salles.id
+            WHERE seances.id = ?
+            ORDER BY sieges.rangee ASC, sieges.numero ASC;
+        `, [seanceId]);
+        let nrangee = 0;
+        const liste = [[]];
+        for (let i=0; i<sieges.length; i++) {
+            if ((sieges[i].rangee - 1) !== nrangee) {
+                liste.push([]);
+                nrangee ++;
+            }
+            liste[nrangee].push(sieges[i]);
+        }
+        const [siegesReserves] = await pool.query(`
+            SELECT reservation_sieges.id_siege as id
+            FROM reservation_sieges
+            INNER JOIN reservations ON reservations.id = reservation_sieges.id_reservation
+            WHERE reservations.id_seance = ?;`, [seanceId]);
+            const listeSR = [2, 6, 8];
+            for (let i=0; i<siegesReserves.length; i++) {
+                listeSR.push(siegesReserves[i].id);
+            }
+            for (let i=0; i<liste.length; i++) {
+                for (let j=0; j<liste[i].length; j++) {
+                    if (listeSR.includes(liste[i][j].id)) {
+                        liste[i][j].reserve = true;
+                    }
+                }
+            }
+        res.json(liste);
+    }catch (err) {
+        next(err);
+    }
+}
+
+module.exports = {pageChoixSeance, pageChoixSieges, listeSeances, listeSieges};

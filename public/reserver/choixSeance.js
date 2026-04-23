@@ -24,6 +24,7 @@ document.addEventListener("DOMContentLoaded", async (event) => {
 
 div.addEventListener("click", (event) => {
     if (event.target.classList.contains("seances")) {
-        location.href = "/reserver/"
+        const seanceId = event.target.value;
+        location.href = `/reserver/seance/${seanceId}`;
     }
 })

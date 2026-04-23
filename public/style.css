@@ -2,6 +2,7 @@ body {
     background: black;
     color: white;
     text-align: center;
+    font-size: large;
 }
 button {
     background-color: darkblue;
@@ -12,4 +13,13 @@ button.gros {
     margin: 10px;
     font-size: medium;
     height: 40px;
+}
+table,td,th {
+    border: 1px solid white;
+    border-collapse: collapse;
+    margin: auto;
+}
+input[type="checkbox"] {
+    width: 50pt;
+    height: 50pt;
 }

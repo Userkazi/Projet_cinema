@@ -5,9 +5,8 @@ const controller = require("../controllers/reserverController");
 
 router.get("/:filmId", controller.pageChoixSeance);
 router.get("/seances/:filmId", controller.listeSeances);
-/*
-router.get("/seance/:seanceId", controller.pageChoixPlace);
-router.get("/places/:seanceId", controller.listePlaces);
-router.post("/reserver", controller.reserver);*/
+router.get("/seance/:seanceId", controller.pageChoixSieges);
+router.get("/sieges/:seanceId", controller.listeSieges);
+/*router.post("/reserver", controller.reserver);*/
 
 module.exports = router;

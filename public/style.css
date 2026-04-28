@@ -4,7 +4,7 @@ body {
     text-align: center;
     font-size: large;
 }
-button {
+button,input[type = "button"],input[type = "submit"] {
     background-color: darkblue;
     color: white;
     border: 1px solid white;

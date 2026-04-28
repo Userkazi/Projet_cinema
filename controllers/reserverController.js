@@ -92,4 +92,40 @@ async function listeSieges(req,res, next) {
     }
 }
 
-module.exports = {pageChoixSeance, pageChoixSieges, listeSeances, listeSieges};
+//Créer une réservation
+async function reserver(req, res, next) {
+    try {
+        const userId = req.session.userId;
+        const seance = parseInt(req.body.seance);
+        const sieges = req.body.sieges;
+        const [reservation] = await pool.query(`
+            INSERT INTO reservations (id_utilisateur, id_seance) VALUES (?,?);
+            SELECT LAST_INSERT_ID() as id FROM reservation`, [userId, seanceId]);
+        const reservationId = reservation[0].id;
+        for (let i = 0; i<sieges.length; i++) {
+            await pool.query(`INSERT INTO reservation_sieges (id_reservation, id_siege) VALUES (?,?)`, [reservationId, sieges[i]]);
+        }
+        res.json({reservationId: reservationId});
+    }catch (err) {
+        next(err);
+    }
+}
+
+//Renvoyer le film et l'heure d'une séance
+async function infosSeance(req, res, next) {
+    try {
+        const seanceId = parseInt(req.params.seanceId);
+        const [rows] = await pool.query(`
+            SELECT films.Titre as film, seances.date_heure as quand FROM seances
+            INNER JOIN films ON seances.id_film = films.id
+            WHERE seances.id = ?`, [seanceId]);
+            if (rows.length === 0) {
+                throw new HttpError(404, "Séance introuvable.");
+            }
+        res.json({film: rows[0].film, quand: rows[0].quand});
+    }catch (err) {
+        next(err);
+    }
+}
+
+module.exports = {pageChoixSeance, pageChoixSieges, listeSeances, listeSieges, reserver, infosSeance};

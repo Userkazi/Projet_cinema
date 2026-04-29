@@ -8,7 +8,7 @@ const pageIntrouvable = ((err, next) => {
     }
 });
 
-const chemin = path.join(__dirname, "../public/films");
+const chemin = path.join(__dirname, "../public/film");
 
 function pageGestion(req, res, next) {
     try {
@@ -21,6 +21,9 @@ function pageGestion(req, res, next) {
 async function listeFilms(req, res, next) {
     try {
         const [rows] = await pool.query("SELECT * FROM films");
+        if (rows.length === 0) {
+            //throw new HttpError(404, Aucunes salles)
+        }
         res.json(rows);
     } catch (err) {
         next(err);

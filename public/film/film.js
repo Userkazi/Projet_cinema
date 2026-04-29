@@ -15,8 +15,8 @@ async function chargerFilms() {
             return;
         }
 
-        let html = "<table border='1' align='center'>";
-        html += "<tr><th>ID</th><th>Titre</th><th>Résumé</th><th>Durée</th><th>Affiche</th><th>Catégorie</th><th>Classification</th><th>Action</th></tr>";
+        let html = "<table style='border: 2px solid black;'>";
+        html += "<tr><th>ID</th><th>Titre</th><th>Résumé</th><th>Durée</th><th>Affiche</th><th>Catégorie</th><th>Classification</th><th></th></tr>";
 
         for (let i = 0; i < films.length; i++) {
             html += `

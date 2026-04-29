@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Espace Administrateur</title>
+</head>
+<body style="display: none;"> <h1>Espace Administrateur</h1>
+    <h2>Créer un nouvel Agent</h2>
+    
+    <form id="form-agent">
+        <input type="text" id="nom" placeholder="Nom de l'agent" required><br><br>
+        <input type="email" id="email" placeholder="Email de l'agent" required><br><br>
+        <input type="password" id="mot_de_passe" placeholder="Mot de passe provisoire" required><br><br>
+        <button type="submit">Créer l'Agent</button>
+    </form>
+
+    <script>
+        // --- SCRIPT DE SÉCURITÉ DE LA PAGE ---
+        async function verifierAcces() {
+            try {
+                const reponse = await fetch('/api/auth/me');
+                if (!reponse.ok) {
+                    window.location.href = '/login.html';
+                } else {
+                    const data = await reponse.json();
+                    if (data.role !== 1) {
+                        window.location.href = '/login.html';
+                    } else {
+                        document.body.style.display = 'block';
+                    }
+                }
+            } catch (erreur) {
+                window.location.href = '/login.html';
+            }
+        }
+        verifierAcces();
+
+        // --- SCRIPT D'ACTION (CRÉER AGENT) ---
+        document.getElementById('form-agent').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const nom = document.getElementById('nom').value;
+            const email = document.getElementById('email').value;
+            const mot_de_passe = document.getElementById('mot_de_passe').value;
+
+            const reponse = await fetch('/api/admin/agents', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nom: nom, email: email, mot_de_passe: mot_de_passe })
+            });
+
+            const data = await reponse.json();
+            if (reponse.ok) {
+                alert("Agent créé avec succès !");
+            } else {
+                alert("Erreur : " + data.message);
+            }
+        });
+    </script>
+</body>
+</html>

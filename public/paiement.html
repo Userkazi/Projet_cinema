@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Paiement Sécurisé</title>
+</head>
+<body>
+    <h2>Simuler un Paiement</h2>
+    <form id="form-paiement">
+        <input type="text" id="carte" placeholder="0000 0000 0000 0000" maxlength="19" required>
+        <input type="text" id="date_exp" placeholder="MM/YY" maxlength="5" required>
+        <input type="text" id="cvs" placeholder="123" maxlength="3" required>
+        <button type="submit">Payer</button>
+    </form>
+
+    <script>
+        const inputCarte = document.getElementById('carte');
+        
+        inputCarte.addEventListener('input', (e) => {
+            let texte = e.target.value.replace(/\D/g, '');
+            let texteEspace = texte.replace(/(\d{4})/g, '$1 ').trim();
+            e.target.value = texteEspace;
+        });
+
+        document.getElementById('form-paiement').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            
+            const carte = document.getElementById('carte').value;
+            const regexCarte = new RegExp('^[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}$');
+            
+            if (!regexCarte.test(carte)) {
+                alert("Erreur : La carte doit contenir 16 chiffres valides.");
+                return;
+            }
+
+            const reponse = await fetch('/api/paiements/simuler', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ montant: 15.00, id_reservation: 1 })
+            });
+
+            if (reponse.ok) {
+                alert("Paiement réussi !");
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cinéma Express - Connexion</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        form { display: inline-block; text-align: left; padding: 20px; border: 1px solid #ccc; }
+        input { display: block; margin-bottom: 10px; width: 200px; padding: 5px; }
+        button { padding: 5px 15px; cursor: pointer; }
+        #message-erreur { color: red; font-size: 14px; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <h1>Bienvenue sur Cinéma Express</h1>
+    
+    <form id="form-connexion">
+        <div id="message-erreur"></div>
+
+        <label for="email">Adresse Email :</label>
+        <input type="email" id="email" required>
+
+        <label for="mot_de_passe">Mot de passe :</label>
+        <input type="password" id="mot_de_passe" required>
+
+        <button type="submit">Se connecter</button>
+    </form>
+
+    <script>
+        // 1. On "écoute" le moment où l'utilisateur clique sur le bouton "Se connecter"
+        document.getElementById('form-connexion').addEventListener('submit', async function(event) {
+            
+            // 2. On empêche la page de se recharger (le comportement par défaut des formulaires HTML)
+            event.preventDefault(); 
+
+            // 3. On récupère ce que l'utilisateur a tapé dans les cases
+            const email = document.getElementById('email').value;
+            const mot_de_passe = document.getElementById('mot_de_passe').value;
+            const divErreur = document.getElementById('message-erreur');
+
+            // 4. On réinitialise le message d'erreur au cas où il y en aurait un vieux
+            divErreur.textContent = "";
+
+            try {
+                // 5. On envoie une requête POST à notre serveur Node.js avec l'email et le mot de passe
+                const reponse = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, mot_de_passe: mot_de_passe })
+                });
+
+                // 6. On convertit la réponse du serveur (JSON) en objet JavaScript lisible
+                const data = await reponse.json();
+
+                // 7. Si le statut de la réponse est un succès (ex: 200)
+                if (reponse.ok) {
+                    
+                    // 8. LA REDIRECTION selon le rôle renvoyé par le backend
+                    if (data.role === 1) { // 1 = Administrateur (selon notre SQL)
+                        window.location.href = '/admin.html';
+                    } else if (data.role === 2) { // 2 = Agent
+                        window.location.href = '/agent.html';
+                    } else if (data.role === 3) { // 3 = Client
+                        window.location.href = '/client.html';
+                    }
+
+                } else {
+                    // 9. Si le mot de passe est faux (ex: erreur 401), on affiche le message du serveur
+                    divErreur.textContent = data.message;
+                }
+            } catch (erreur) {
+                // 10. Si le serveur a crashé ou qu'il n'y a pas d'internet
+                divErreur.textContent = "Impossible de joindre le serveur.";
+            }
+        });
+    </script>
+</body>
+</html>

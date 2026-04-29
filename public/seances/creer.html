@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+    <html lang="fr">
+        <head>
+            <meta charset="UTF-8">
+            <link rel="stylesheet" href="../style.css">
+            <title>Création de séance</title>
+        </head>
+        <body>
+            <h1>Création de séance</h1>
+            <form id="creerUneSeance">
+                <label for="quand">Date et heure</label><br>
+                <input id="quand" name="quand" type="datetime-local" required><br><br>
+                <label for="prix">Prix</label><br>
+                <input id="prix" name="prix" type="number" step="0.01" required><br><br>
+                <label for="film">Film</label><br>
+                <select id="film" name="film" required disabled></select><br><br>
+                <label for="salle">Salle</label><br>
+                <select id="salle" name="salle" required disabled></select><br><br>
+                <input id="retour" type="button" value="Retour">
+                <input type="submit" value="Créer">
+            </form>
+            <p id="msg"></p>
+        </body>
+        <script src="creer.js"></script>
+    </html>

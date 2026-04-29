@@ -1,6 +1,5 @@
 const path = require("path");
 const HttpError = require("./httpError");
-const session = require("express-session");
 const pool = require("../db");
 
 const pageIntrouvable = ((err, next) => {
@@ -95,13 +94,12 @@ async function listeSieges(req,res, next) {
 //Créer une réservation
 async function reserver(req, res, next) {
     try {
-        const userId = req.session.userId;
-        const seance = parseInt(req.body.seance);
+        const userId = req.session.userid;
+        const seanceId = parseInt(req.body.seance);
         const sieges = req.body.sieges;
         const [reservation] = await pool.query(`
-            INSERT INTO reservations (id_utilisateur, id_seance) VALUES (?,?);
-            SELECT LAST_INSERT_ID() as id FROM reservation`, [userId, seanceId]);
-        const reservationId = reservation[0].id;
+            INSERT INTO reservations (id_utilisateur, id_seance) VALUES (?,?);`, [userId, seanceId]);
+        const reservationId = reservation.insertId;
         for (let i = 0; i<sieges.length; i++) {
             await pool.query(`INSERT INTO reservation_sieges (id_reservation, id_siege) VALUES (?,?)`, [reservationId, sieges[i]]);
         }

@@ -58,7 +58,7 @@ form.addEventListener("submit", async (event) => {
     divConfirmation.innerHTML = `
     <h1>Veuillez confirmer votre sélection</h1>
     <p><strong>Titre du film : </strong>${film}</p>
-    <p><strong>Date et heure : </strong>${new Date(quand).toLocaleString("ca-fr")}</p>
+    <p><strong>Date et heure : </strong>${new Date(quand).toLocaleString("fr-ca")}</p>
     <p><strong>Sièges : </strong>${sieges}</p>
     <button type="button" id="retour">Retour au catalogue</button>
     <button type="button" id="confirmer">confirmer</button>`;

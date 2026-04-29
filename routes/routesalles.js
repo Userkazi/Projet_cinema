@@ -4,7 +4,6 @@ const controller = require("../controllers/sallesController");
 const router = express.Router();
 
 router.get("/", controller.pageGestion);
-router.get("/creer", controller.pageCreer);
 router.get("/liste", controller.listeSalles);
 router.post("/creer", controller.creer);
 router.delete("/supprimer", controller.supprimer);

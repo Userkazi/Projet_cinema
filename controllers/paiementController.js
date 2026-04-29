@@ -1,7 +1,8 @@
 const pool = require('../config/db');
 
 const simulerPaiement = async (req, res) => {
-    const { montant, id_reservation } = req.body;
+    const id_reservation= req.params.id;
+    const { montant} = req.body;
 
     try {
         await pool.execute(
@@ -12,7 +13,7 @@ const simulerPaiement = async (req, res) => {
             'UPDATE reservations SET statut = ? WHERE id = ?',
             ['payé', id_reservation]
         );
-        res.status(201).json({ message: "Paiement enregistré et réservation confirmée !" });
+        res.status(201).json({ message: "Paiement enregistré et réservation confirmée !", id_reservation});
     } catch (erreur) {
         res.status(500).json({ message: "Erreur serveur lors de la transaction" });
     }

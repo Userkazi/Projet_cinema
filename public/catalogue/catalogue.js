@@ -5,7 +5,7 @@ function creerBouton(id) {
     bouton.className = "details";
     return bouton;
 }
-const liste = document.getElementById("films");
+const liste = document.getElementById("catalogueFilms");
 document.addEventListener("DOMContentLoaded", async () => {
     const msg = document.getElementById(`msg`);
     msg.textContent = `Chargement des films`;
@@ -17,13 +17,13 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
     for (let i=0; i<data.length; i++) {
         const film = data[i];
-        const div = document.createElement("div"); div.style.width = "25%"; div.style.display = "flex";
+        const div = document.createElement("div"); div.className = "film";
         const poster = document.createElement(`img`); poster.src = film.url; poster.alt = "Affiche du film" + film.titre;
         const titre = document.createElement("h2"); titre.textContent = film.titre;
         const categorie = document.createElement("span"); categorie.textContent = film.categorie;
         const classification = document.createElement("span"); classification.textContent = film.classification;
         const boutonDetails = creerBouton(film.id);
-        const infos = document.createElement("p"); infos.append(categorie, "•", classification);
+        const infos = document.createElement("p"); infos.append(categorie, " • ", classification);
         div.append(poster, titre, infos, boutonDetails);
         liste.append(div);
     }
@@ -31,6 +31,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 })
 liste.addEventListener("click", async (event) => {
     if (event.target.classList.contains("details")) {
-        location.href(`/catalogue/details/${event.target.value}`);
+        location.href = `/catalogue/details/${event.target.value}`;
     }
 });

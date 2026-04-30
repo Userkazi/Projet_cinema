@@ -1,5 +1,5 @@
 const uris = location.pathname.split("/");
-const filmId = uris[uris.length -1];
+const filmId = parseInt(uris[uris.length -1]);
 const div = document.getElementById("seances");
 
 document.addEventListener("DOMContentLoaded", async (event) => {

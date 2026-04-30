@@ -1,5 +1,5 @@
 const uris = location.pathname.split("/");
-const seanceId = uris[uris.length -1];
+const seanceId = parseInt(uris[uris.length -1]);
 const tableau = document.getElementById("sieges");
 const form = document.getElementById("selectionSieges");
 

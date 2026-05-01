@@ -1,5 +1,21 @@
+const path = require("path");
 const pool = require('../config/db');
 const bcrypt = require('bcrypt'); // Si tu utilises le hachage
+
+const pageIntrouvable = ((err, next) => {
+    if (err) {
+        next(new HttpError(404, "Page introuvable"));
+    }
+});
+const chemin = path.join(__dirname, "/../public");
+//Page de connexion
+async function pageLogin(req, res, next) {
+    try {
+        res.sendFile(path.join(chemin,  "login.html"), (err) => pageIntrouvable(err, next));
+    }catch (err) {
+        next(err);
+    }
+}
 
 const login = async (req, res) => {
     const { email, mot_de_passe } = req.body;
@@ -10,7 +26,9 @@ const login = async (req, res) => {
         const user = utilisateurs[0];
 
         // 2. Vérifier si l'utilisateur existe et si le mot de passe correspond
-        if (!user || !(await bcrypt.compare(mot_de_passe, user.mot_de_passe))) {
+        if (!user) {
+            return res.status(404).json({ message: "Utilisateur non existant." });
+        }else if (!(await bcrypt.compare(mot_de_passe, user.mot_de_passe))) {
             return res.status(401).json({ message: "Email ou mot de passe incorrect." });
         }
 
@@ -27,6 +45,7 @@ const login = async (req, res) => {
         });
 
     } catch (erreur) {
+        console.log(erreur);
         res.status(500).json({ message: "Erreur serveur." });
     }
 
@@ -51,4 +70,4 @@ const verifierMoi = (req, res) => {
 };
 
 
-module.exports = { login, registerClient, verifierMoi };
+module.exports = { login, registerClient, verifierMoi, pageLogin };

@@ -1,8 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { simulerPaiement } = require('../controllers/paiementController');
-const { verifierSession } = require('../middlewares/authMiddleware');
+const controller = require('../controllers/paiementController');
+const { verifierSession, verifierRole } = require('../middlewares/authMiddleware');
 
-router.post('/simuler/:id', verifierSession, simulerPaiement);
+router.get("/:reservationId", verifierSession, verifierRole([3]), controller.pagePaiement);
+router.post('/simuler/:reservationId', verifierSession, verifierRole([3]), controller.simulerPaiement);
 
 module.exports = router;

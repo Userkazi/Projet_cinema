@@ -1,4 +1,20 @@
+const path = require("path");
 const pool = require('../config/db');
+
+const pageIntrouvable = ((err, next) => {
+    if (err) {
+        next(new HttpError(404, "Page introuvable"));
+    }
+});
+const chemin = path.join(__dirname, "/../public");
+//Page d'paiement
+async function pagePaiement(req, res, next) {
+    try {
+        res.sendFile(path.join(chemin,  "paiement.html"), (err) => pageIntrouvable(err, next));
+    }catch (err) {
+        next(err);
+    }
+}
 
 const simulerPaiement = async (req, res) => {
     const id_reservation= req.params.id;
@@ -19,4 +35,4 @@ const simulerPaiement = async (req, res) => {
     }
 };
 
-module.exports = { simulerPaiement };
+module.exports = { simulerPaiement, pagePaiement };

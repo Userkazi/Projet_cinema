@@ -1,7 +1,7 @@
 // 1. Vérifier si l'utilisateur est connecté
 const verifierSession = (req, res, next) => {
     if (!req.session.utilisateur) {
-        return res.status(401).json({ message: "Accès refusé. Veuillez vous connecter." });
+        return res.redirect("/api/auth");
     }
     next(); // Il est connecté, on passe à la suite
 };

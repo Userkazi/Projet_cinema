@@ -19,8 +19,8 @@
 const authAdmin= require('./routes/admin');
 app.use('/api/admin', authAdmin);
 
-const validepaiements = require('./routes/paiements');
-app.use('/api/paiements', validepaiements);
+const paiements = require('./routes/paiements');
+app.use('/api/paiements', paiements);
 
 const PORT = process.env.PORT || 3000; 
 app.listen(PORT, () => console.log(`Serveur lancé sur http://localhost:${PORT}`));

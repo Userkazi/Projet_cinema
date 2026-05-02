@@ -1,12 +1,7 @@
 const path = require("path");
 const HttpError = require("./httpError");
 const pool = require("../db");
-
-const pageIntrouvable = ((err, next) => {
-    if (err) {
-        next(new HttpError(404, "Page introuvable"));
-    }
-});
+const pageIntrouvable = require("../services/pageIntrouvable");
 const chemin = path.join(__dirname, "/../public/catalogue");
 //Page d'acceuille avec la liste des films
 async function pageCatalogue(req, res, next) {

@@ -6,6 +6,9 @@ function creerBouton(id) {
     return bouton;
 }
 const liste = document.getElementById("catalogueFilms");
+const modifier = document.getElementById(`modifier`);
+const reservations = document.getElementById("reservations");
+const logout = document.getElementById("logout");
 document.addEventListener("DOMContentLoaded", async () => {
     const msg = document.getElementById(`msg`);
     msg.textContent = `Chargement des films`;
@@ -33,4 +36,15 @@ liste.addEventListener("click", async (event) => {
     if (event.target.classList.contains("details")) {
         location.href = `/catalogue/details/${event.target.value}`;
     }
+});
+modifier.addEventListener("click", (event) => {
+    location.href = "/compte/";
+});
+reservations.addEventListener("click", (event) => {
+    alert("Cette fonction n'est pas encore disponible.");
+});
+logout.addEventListener("click", async (event) => {
+    await fetch("/compte/logout", {
+        method: "POST"
+    });
 });

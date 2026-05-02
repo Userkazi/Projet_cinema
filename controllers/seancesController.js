@@ -3,11 +3,7 @@ const HttpError = require("./httpError");
 const validation = require("../services/seancesValidationService");
 const pool = require("../db");
 //Gestion des pages html
-const pageIntrouvable = ((err, next) => {
-    if (err) {
-        next(new HttpError(404, "Page introuvable"));
-    }
-});
+const pageIntrouvable = require("../services/pageIntrouvable");
 const chemin = path.join(__dirname, "/../public/seances");
 function pageCreer(req, res, next) {
     try {

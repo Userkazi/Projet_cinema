@@ -6,6 +6,7 @@ const port = process.env.PORT||3000;
 const seances = require("./routes/seancesRoutes");
 const reserver = require("./routes/reserverRoutes");
 const catalogue = require("./routes/catalogueRoutes");
+const compte = require("./routes/compteRoutes");
 
 
 
@@ -14,6 +15,7 @@ app.use(express.static("public"));
 app.use("/seances", seances);
 app.use("/reserver", reserver);
 app.use("/catalogue", catalogue);
+app.use("/compte", compte);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode||500;

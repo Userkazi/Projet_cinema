@@ -1,8 +1,12 @@
-function creerBouton(id) {
+function creerBouton(id, action) {
     const bouton = document.createElement("button");
-    bouton.textContent = "Supprimer la séance";
+    if (action === "supprimer") {
+        bouton.textContent = "Supprimer la séance";
+    }else if (action === "affSieges") {
+        bouton.textContent = "Voir le plan des sièges";
+    }
+    bouton.className = action;
     bouton.value = id;
-    bouton.className = "supprimer";
     return bouton;
 }
 const tableau = document.getElementById("seances");
@@ -27,8 +31,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         const tdDuree = document.createElement("td"); tdDuree.textContent = row.duree + " min";
         const tdLibre = document.createElement("td"); tdLibre.textContent = row.libre;
         const tdReserve = document.createElement("td"); tdReserve.textContent = row.reserve;
-        const tdSup = document.createElement("td"); tdSup.append(creerBouton(row.id));
-        tr.append(tdId, tdQuand, tdPrix, tdFilm, tdSalle, tdDuree, tdLibre, tdReserve, tdSup);
+        const tdAction = document.createElement("td"); tdAction.append(creerBouton(row.id, `affSieges`), creerBouton(row.id, `supprimer`));
+        tr.append(tdId, tdQuand, tdPrix, tdFilm, tdSalle, tdDuree, tdLibre, tdReserve, tdAction);
         tableau.append(tr);
     }
     msg.textContent = ``;
@@ -47,6 +51,8 @@ tableau.addEventListener("click", async (event) => {
         }else {
             alert("La suppression n'a pas pu être effectuée.");
         }
+    }else if (event.target.classList.contains("affSieges")) {
+        location.href = `/seances/plan-sieges/${event.target.value}`;
     }
 });
 retour.addEventListener("click", () => location.href = "/seances");

@@ -1,6 +1,13 @@
+function creerBouton(id) {
+    const bouton = document.createElement("button");
+    bouton.textContent = "Voir le plan des sièges";
+    bouton.className = "affSieges";
+    bouton.value = id;
+    return bouton;
+}
 const retour = document.getElementById(`retour`);
+const tableau = document.getElementById("seances");
 document.addEventListener("DOMContentLoaded", async () => {
-    const tableau = document.getElementById("seances");
     const msg = document.getElementById(`msg`);
     msg.textContent = `Chargement des séances`;
     const response = await fetch("/seances/historique-des-seances");
@@ -20,9 +27,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         const tdDuree = document.createElement("td"); tdDuree.textContent = row.duree + " min";
         const tdLibre = document.createElement("td"); tdLibre.textContent = row.libre;
         const tdReserve = document.createElement("td"); tdReserve.textContent = row.reserve;
-        tr.append(tdId, tdQuand, tdPrix, tdFilm, tdSalle, tdDuree, tdLibre, tdReserve);
+        const tdAction = document.createElement("td"); tdAction.append(creerBouton(row.id));
+        tr.append(tdId, tdQuand, tdPrix, tdFilm, tdSalle, tdDuree, tdLibre, tdReserve, tdAction);
         tableau.append(tr);
     }
     msg.textContent = "";
+});
+tableau.addEventListener("click", async (event) => {
+    if (event.target.classList.contains("affSieges")) {
+        location.href = `/seances/plan-sieges/${event.target.value}`;
+    }
 });
 retour.addEventListener("click", () => location.href = "/seances");

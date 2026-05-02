@@ -94,7 +94,7 @@ async function listeSieges(req,res, next) {
 //Créer une réservation
 async function reserver(req, res, next) {
     try {
-        const userId = parseInt(req.session.userid);
+        const userId = parseInt(req.session.utilisateur.id);
         const seanceId = parseInt(req.body.seance);
         const sieges = req.body.sieges;
         const [reservation] = await pool.query(`

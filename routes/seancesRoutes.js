@@ -17,4 +17,7 @@ router.get("/futur-des-seances", controller.listeFutur);
 //Suppression de séances
 router.delete("/supprimer", controller.supprimer);
 
+//Affichage du plan des sièges d'une séance
+router.get("/plan-sieges/:seanceId", controller.pageSieges);
+
 module.exports = router;

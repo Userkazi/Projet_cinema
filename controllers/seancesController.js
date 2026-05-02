@@ -37,6 +37,13 @@ function pageFutur(req, res, next) {
         next(err);
     }
 }
+function pageSieges(req, res, next) {
+    try {
+        res.sendFile(path.join(chemin, "/planSieges.html"), (err) => pageIntrouvable(err, next));
+    }catch (err) {
+        next(err);
+    }
+}
 //Lister les films pour créé une séance
 async function listeFilms(req, res, next) {
     try {
@@ -164,4 +171,4 @@ async function supprimer(req, res, next) {
     }
 }
 
-module.exports = {pageGestion, pageCreer, pageFutur, pageHistorique, creer, listeFilms, sallesDisponibles, listeHistorique, listeFutur, supprimer};
+module.exports = {pageGestion, pageCreer, pageFutur, pageHistorique, creer, listeFilms, sallesDisponibles, listeHistorique, listeFutur, supprimer, pageSieges};

@@ -5,6 +5,11 @@
     <title>Paiement Sécurisé</title>
 </head>
 <body>
+    <header> 
+        <a href="/auth/profil">Gérer mon profil</a>
+        <a href="/auth/logout">Se déconnecter</a>
+    </header>
+
     <h2>Simuler un Paiement</h2>
     <form id="form-paiement">
         <input type="text" id="carte" placeholder="0000 0000 0000 0000" maxlength="19" required>
@@ -49,7 +54,7 @@
 
             //  ENVOI AU SERVEUR 
 
-            const reponse = await fetch('/api/paiements/simuler', {
+            const reponse = await fetch('/paiements/simuler', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ montant: 15.00}) // Le montant pourrait aussi être dynamique plus tard

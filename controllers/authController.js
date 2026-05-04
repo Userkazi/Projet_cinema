@@ -1,4 +1,4 @@
-const path = require("path");
+  const path = require("path");
 const pool = require('../config/db');
 const bcrypt = require('bcrypt'); // Si tu utilises le hachage
 
@@ -65,9 +65,32 @@ const registerClient = async (req, res) => {
     }
 };
 
-const verifierMoi = (req, res) => {
-    res.status(200).json({ role: req.session.utilisateur.role });
+const verifierMoi = async (req, res) => {
+   try {
+        const [utilisateurs] = await pool.execute(
+            'SELECT id, nom, email, id_role as role FROM utilisateurs WHERE id = ?', 
+            [req.session.utilisateur.id]
+        );
+        res.status(200).json(utilisateurs[0]);
+    } catch (erreur) {
+        res.status(500).json({ message: "Erreur lors de la récupération du profil." });
+    }
+};
+
+const modifierProfil = async (req, res) => {
+    const { nom, email } = req.body;
+    const idUtilisateur = req.session.utilisateur.id;
+
+    try {
+        await pool.execute(
+            'UPDATE utilisateurs SET nom = ?, email = ? WHERE id = ?',
+            [nom, email, idUtilisateur]
+        );
+        res.status(200).json({ message: "Votre profil a été mis à jour avec succès !" });
+    } catch (erreur) {
+        res.status(500).json({ message: "Erreur lors de la mise à jour. L'email est peut-être déjà utilisé." });
+    }
 };
 
 
-module.exports = { login, registerClient, verifierMoi, pageLogin };
+module.exports = { login, registerClient, verifierMoi, pageLogin, modifierProfil };

@@ -4,21 +4,38 @@
     <meta charset="UTF-8">
     <title>Espace Administrateur</title>
 </head>
-<body style="display: none;"> <h1>Espace Administrateur</h1>
-    <h2>Créer un nouvel Agent</h2>
-    
-    <form id="form-agent">
-        <input type="text" id="nom" placeholder="Nom de l'agent" required><br><br>
-        <input type="email" id="email" placeholder="Email de l'agent" required><br><br>
-        <input type="password" id="mot_de_passe" placeholder="Mot de passe provisoire" required><br><br>
-        <button type="submit">Créer l'Agent</button>
-    </form>
+<body style="display: none;"> 
+    <header> 
+        <a href="/auth/profil">Gérer mon profil</a>
+        <a href="/auth/logout">Se déconnecter</a> 
+        <button id="btn-creer-agent">Créer un Agent</button>
+        <button id="btn-voir-users">Voir les Utilisateurs</button>
+        <h1>Espace Administrateur</h1>
+    </header>
+
+    // SECTION 1 : CRÉATION D'AGENT (Visible par défaut) 
+
+    <div id="section-creation">
+        <h2>Créer un nouvel Agent</h2>
+        <form id="form-agent">
+            <input type="text" id="nom" placeholder="Nom de l'agent" required><br><br>
+            <input type="email" id="email" placeholder="Email de l'agent" required><br><br>
+            <input type="password" id="mot_de_passe" placeholder="Mot de passe provisoire" required><br><br>
+            <button type="submit">Créer l'Agent</button>
+        </form>
+    </div>
+
+    //SECTION 2 : LISTE DES UTILISATEURS (Cachée par défaut) 
+    <div id="section-liste" style="display: none;">
+        <h2>Liste des utilisateurs actifs</h2>
+        <ul id="liste-users"></ul>
+    </div>
 
     <script>
-        // --- SCRIPT DE SÉCURITÉ DE LA PAGE ---
+        //  SCRIPT DE SÉCURITÉ DE LA PAGE 
         async function verifierAcces() {
             try {
-                const reponse = await fetch('/api/auth/me');
+                const reponse = await fetch('/auth/me');
                 if (!reponse.ok) {
                     window.location.href = '/login.html';
                 } else {
@@ -35,14 +52,42 @@
         }
         verifierAcces();
 
-        // --- SCRIPT D'ACTION (CRÉER AGENT) ---
+        // SCRIPT DE BASCULE ET AFFICHAGE DES UTILISATEURS 
+        const btnCreer = document.getElementById('btn-creer-agent');
+        const btnVoir = document.getElementById('btn-voir-users');
+        const sectionCreation = document.getElementById('section-creation');
+        const sectionListe = document.getElementById('section-liste');
+        const ulUsers = document.getElementById('liste-users');
+
+        btnCreer.addEventListener('click', () => {
+            sectionCreation.style.display = 'block';
+            sectionListe.style.display = 'none';
+        });
+
+        btnVoir.addEventListener('click', async () => {
+            sectionListe.style.display = 'block';
+            sectionCreation.style.display = 'none';
+            ulUsers.innerHTML = ''; 
+
+            const reponse = await fetch('/admin/utilisateurs');
+            if (reponse.ok) {
+                const utilisateurs = await reponse.json();
+                utilisateurs.forEach(user => {
+                    const li = document.createElement('li');
+                    li.textContent = `ID: ${user.id} | Nom: ${user.nom} | Email: ${user.email} | Rôle: ${user.id_role}`;
+                    ulUsers.appendChild(li);
+                });
+            }
+        });
+
+        //  SCRIPT D'ACTION (CRÉER AGENT) 
         document.getElementById('form-agent').addEventListener('submit', async function(event) {
             event.preventDefault();
             const nom = document.getElementById('nom').value;
             const email = document.getElementById('email').value;
             const mot_de_passe = document.getElementById('mot_de_passe').value;
 
-            const reponse = await fetch('/api/admin/agents', {
+            const reponse = await fetch('/admin/agents', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nom: nom, email: email, mot_de_passe: mot_de_passe })
@@ -51,6 +96,7 @@
             const data = await reponse.json();
             if (reponse.ok) {
                 alert("Agent créé avec succès !");
+                document.getElementById('form-agent').reset(); // Vide le formulaire après succès
             } else {
                 alert("Erreur : " + data.message);
             }

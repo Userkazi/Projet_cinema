@@ -45,7 +45,7 @@
 
             try {
                 // 5. On envoie une requête POST à notre serveur Node.js avec l'email et le mot de passe
-                const reponse = await fetch('/api/auth/login', {
+                const reponse = await fetch('/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: email, mot_de_passe: mot_de_passe })
@@ -76,5 +76,6 @@
             }
         });
     </script>
+    <p>Nouveau client ? <a href="/register.html">Créer un compte ici</a></p>
 </body>
 </html>

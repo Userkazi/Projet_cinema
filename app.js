@@ -1,10 +1,14 @@
  require('dotenv').config();
  const express= require('express');
+ const path= require('path');
  const session= require('express-session');
  const app=express();
 
  app.use (express.json());
- app.use(express.static('public'));
+ app.use(express.static('public', { extensions: ['html'] })); //Pour lancer les routes,
+ //  Cet objet dit au serveur : 
+ // "Si l'URL n'a pas d'extension, essaie d'ajouter 
+ // .html en cachette pour voir si le fichier existe sans l'afficher dans sur L'URL."
 
 
  app.use(session({
@@ -14,13 +18,13 @@
 }));
 
  const authRoutes= require('./routes/auth');
- app.use('/api/auth',authRoutes);
+ app.use('/auth',authRoutes);
 
 const authAdmin= require('./routes/admin');
-app.use('/api/admin', authAdmin);
+app.use('/admin', authAdmin);
 
 const paiements = require('./routes/paiements');
-app.use('/api/paiements', paiements);
+app.use('/paiements', paiements);
 
 const PORT = process.env.PORT || 3000; 
 app.listen(PORT, () => console.log(`Serveur lancé sur http://localhost:${PORT}`));

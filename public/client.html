@@ -2,10 +2,56 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Espace client</title>
+    <title>Espace Client - Cinéma Express</title>
 </head>
-<body>
-    <h1>Bienvenue dans le panneau client</h1>
-    <p>Seuls les administrateurs voient cette page.</p>
+<body style="display: none;"> 
+    <header> 
+        <a href="/auth/profil">Gérer mon profil</a>
+        <a href="/auth/logout">Se déconnecter</a>
+        <h1>Bienvenue sur Cinéma Express</h1>
+    </header>
+
+    <main>
+        <h2>Que souhaitez-vous faire ?</h2>
+        
+        // Liens vers les modules 2,4 et 6
+
+        <button id="btn-catalogue">Voir les films à l'affiche</button>
+        <button id="btn-mes-reservations">Mes réservations</button>
+    </main>
+
+    <script>
+        // SÉCURITÉ DE LA PAGE 
+        async function verifierAcces() {
+            try {
+                const reponse = await fetch('/auth/me');
+                if (!reponse.ok) {
+                    window.location.href = '/login.html';
+                } else {
+                    const data = await reponse.json();
+                    // Le rôle 3 correspond au Client
+                    if (data.role !== 3) { 
+                        window.location.href = '/login.html';
+                    } else {
+                        document.body.style.display = 'block';
+                    }
+                }
+            } catch (erreur) {
+                window.location.href = '/login.html';
+            }
+        }
+        verifierAcces();
+
+        // NAVIGATION VERS LES AUTRES MODULES 
+        document.getElementById('btn-catalogue').addEventListener('click', () => {
+            // Remplace l'URL par celle définie au niveau du Module 2
+            window.location.href = '/films'; 
+        });
+
+        document.getElementById('btn-mes-reservations').addEventListener('click', () => {
+            // Remplace l'URL par celle définie au niveau du Module 4/6
+            window.location.href = '/reservations/mes-billets'; 
+        });
+    </script>
 </body>
 </html>

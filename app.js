@@ -13,9 +13,10 @@ const catalogue = require("./routes/catalogueRoutes");
 const compte = require("./routes/compteRoutes");
 const reservations = require("./routes/reservationsRoutes");
 const billets = require("./routes/billetsRoutes");
-const authRoutes= require('./routes/auth');
-const authAdmin= require('./routes/admin');
-const paiements = require('./routes/paiements');
+const authRoutes= require('./routes/authRoutes');
+const authAdmin= require('./routes/adminRoutes');
+const paiements = require('./routes/paiementsRoutes');
+const agent = require("./routes/agentRoutes");
 
 //Configuration de la documentation swagger
 const options = {
@@ -49,6 +50,7 @@ app.use("/billets", billets);
 app.use('/auth',authRoutes);
 app.use('/admin', authAdmin);
 app.use('/paiements', paiements);
+app.use("/agent", agent);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode||500;

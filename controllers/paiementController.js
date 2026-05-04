@@ -1,5 +1,5 @@
 const path = require("path");
-const pool = require('../config/db');
+const pool = require('../db');
 
 const pageIntrouvable = ((err, next) => {
     if (err) {

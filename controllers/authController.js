@@ -1,5 +1,5 @@
-  const path = require("path");
-const pool = require('../config/db');
+const path = require("path");
+const pool = require('../db');
 const bcrypt = require('bcrypt'); // Si tu utilises le hachage
 
 const pageIntrouvable = ((err, next) => {

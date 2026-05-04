@@ -57,4 +57,4 @@ app.use((err, req, res, next) => {
     res.status(statusCode).json({message: err.message});
 });
 
-app.listen(PORT, () => console.log(`Serveur lancé sur http://localhost:${PORT}`));
+app.listen(port, () => console.log(`Serveur lancé sur http://localhost:${port}`));

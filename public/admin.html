@@ -13,7 +13,7 @@
         <h1>Espace Administrateur</h1>
     </header>
 
-    // SECTION 1 : CRÉATION D'AGENT (Visible par défaut) 
+    <!-- SECTION 1 : CRÉATION D'AGENT (Visible par défaut) -->
 
     <div id="section-creation">
         <h2>Créer un nouvel Agent</h2>
@@ -25,14 +25,14 @@
         </form>
     </div>
 
-    //SECTION 2 : LISTE DES UTILISATEURS (Cachée par défaut) 
+    <!-- SECTION 2 : LISTE DES UTILISATEURS (Cachée par défaut) --> 
     <div id="section-liste" style="display: none;">
         <h2>Liste des utilisateurs actifs</h2>
         <ul id="liste-users"></ul>
     </div>
 
     <script>
-        //  SCRIPT DE SÉCURITÉ DE LA PAGE 
+        //  --- SCRIPT DE SÉCURITÉ DE LA PAGE ---
         async function verifierAcces() {
             try {
                 const reponse = await fetch('/auth/me');
@@ -52,7 +52,7 @@
         }
         verifierAcces();
 
-        // SCRIPT DE BASCULE ET AFFICHAGE DES UTILISATEURS 
+        // --- SCRIPT DE BASCULE ET AFFICHAGE DES UTILISATEURS ---
         const btnCreer = document.getElementById('btn-creer-agent');
         const btnVoir = document.getElementById('btn-voir-users');
         const sectionCreation = document.getElementById('section-creation');
@@ -80,7 +80,7 @@
             }
         });
 
-        //  SCRIPT D'ACTION (CRÉER AGENT) 
+        // --- SCRIPT D'ACTION (CRÉER AGENT) ---
         document.getElementById('form-agent').addEventListener('submit', async function(event) {
             event.preventDefault();
             const nom = document.getElementById('nom').value;

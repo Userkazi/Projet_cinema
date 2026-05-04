@@ -10,12 +10,12 @@ form.addEventListener("submit", async (event) => {
     data = Object.fromEntries(data);
 
     if (data.nom === "" || data.rangees === "" || data.sieges === "") {
-        msg.textContent = "Remplis tous les champs";
+        msg.textContent = "Remplis tous les champs.";
         return;
     }
 
     if (isNaN(data.rangees) || isNaN(data.sieges)) {
-        msg.textContent = "Doit être des nombres";
+        msg.textContent = "Les rangées et les sièges doivent être des nombres.";
         return;
     }
 
@@ -43,8 +43,8 @@ async function chargerSalles() {
     const response = await fetch("/salles/liste");
     const salles = await response.json();
 
-    let html = "<table border='1'>";
-    html += "<tr><th>ID</th><th>Nom</th><th>Capacité</th></tr>";
+    let html = "<table border='1' align='center'>";
+    html += "<tr><th>ID</th><th>Nom</th><th>Capacité totale</th><th>Action</th></tr>";
 
     for (let i = 0; i < salles.length; i++) {
         html += `
@@ -52,12 +52,24 @@ async function chargerSalles() {
             <td>${salles[i].id}</td>
             <td>${salles[i].nom}</td>
             <td>${salles[i].capacite_totale}</td>
-        </tr>
-        `;
+            <td><button onclick="supprimerSalle(${salles[i].id})">Supprimer</button></td>
+        </tr>`;
     }
 
     html += "</table>";
     liste.innerHTML = html;
+}
+
+async function supprimerSalle(id) {
+    await fetch("/salles/supprimer", {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ id: id })
+    });
+
+    chargerSalles();
 }
 
 afficher.addEventListener("click", chargerSalles);

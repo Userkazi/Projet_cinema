@@ -5,7 +5,9 @@ const router = express.Router();
 
 router.get("/", controller.pageGestion);
 router.get("/liste", controller.listeFilms);
+router.get("/categories", controller.listeCategories);
+
 router.post("/creer", controller.creer);
-router.delete("/:id/supprimer", controller.supprimer);
+router.delete("/supprimer", controller.supprimer);
 
 module.exports = router;

@@ -1,32 +1,74 @@
-const afficher = document.getElementById("afficher");
+const btn = document.getElementById("afficher");
 const liste = document.getElementById("liste");
+
+btn.addEventListener("click", chargerUsers);
 
 async function chargerUsers() {
     const response = await fetch("/users/liste");
     const users = await response.json();
 
-    let html = "<table border='1'>";
-    html += "<tr><th>ID</th><th>Email</th><th>Action</th></tr>";
+    liste.innerHTML = "";
+
+    const table = document.createElement("table");
+    table.border = "1";
+
+    // HEADER
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+
+    ["ID", "Nom", "Email", "Action"].forEach(text => {
+        const th = document.createElement("th");
+        th.textContent = text;
+        headerRow.appendChild(th);
+    });
+
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+
+    // BODY
+    const tbody = document.createElement("tbody");
 
     for (let i = 0; i < users.length; i++) {
-        html += `
-        <tr>
-            <td>${users[i].id}</td>
-            <td>${users[i].email}</td>
-            <td>
-                <button onclick="supprimer(${users[i].id})">Supprimer</button>
-                <button onclick="reset(${users[i].id})">Reset</button>
-            </td>
-        </tr>`;
+        const row = document.createElement("tr");
+
+        const tdId = document.createElement("td");
+        tdId.textContent = users[i].id;
+
+        const tdNom = document.createElement("td");
+        tdNom.textContent = users[i].nom;
+
+        const tdEmail = document.createElement("td");
+        tdEmail.textContent = users[i].email;
+
+        const tdAction = document.createElement("td");
+
+        const btnSupprimer = document.createElement("button");
+        btnSupprimer.textContent = "Supprimer";
+        btnSupprimer.onclick = () => supprimerUser(users[i].id);
+
+        const btnReset = document.createElement("button");
+        btnReset.textContent = "Reset MDP";
+        btnReset.onclick = () => resetPassword(users[i].id);
+
+        tdAction.appendChild(btnSupprimer);
+        tdAction.appendChild(btnReset);
+
+        row.appendChild(tdId);
+        row.appendChild(tdNom);
+        row.appendChild(tdEmail);
+        row.appendChild(tdAction);
+
+        tbody.appendChild(row);
     }
 
-    html += "</table>";
-    liste.innerHTML = html;
+    table.appendChild(tbody);
+    liste.appendChild(table);
 }
 
-async function supprimer(id) {
+// supprimer
+async function supprimerUser(id) {
     await fetch("/users/supprimer", {
-        method: "DELETE",
+        method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ id })
     });
@@ -34,14 +76,13 @@ async function supprimer(id) {
     chargerUsers();
 }
 
-async function reset(id) {
+// reset password
+async function resetPassword(id) {
     await fetch("/users/reset", {
-        method: "PUT",
+        method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ id })
     });
 
     alert("Mot de passe réinitialisé");
 }
-
-afficher.addEventListener("click", chargerUsers);

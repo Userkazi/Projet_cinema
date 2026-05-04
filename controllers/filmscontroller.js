@@ -2,15 +2,16 @@ const path = require("path");
 const HttpError = require("./httpError");
 const pool = require("../db");
 
-const chemin = path.join(__dirname, "../public/films");
+const chemin = path.join(__dirname, "../public/film");
 
 function pageGestion(req, res, next) {
     try {
-        res.sendFile(path.join(chemin, "film.html"));
+        res.sendFile(path.join(chemin, "films.html"));
     } catch (err) {
         next(err);
     }
-}
+}  
+
 
 // LISTE FILMS
 async function listeFilms(req, res, next) {

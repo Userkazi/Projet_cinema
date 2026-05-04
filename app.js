@@ -12,6 +12,7 @@ app.use(express.static("public"));
 
 app.use("/films", films);
 app.use("/salles", salles);
+app.
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;

@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/style.css">
     <title>Espace Agent</title>
 </head>
 <body>
@@ -10,26 +11,30 @@
         <a href="/auth/logout">Se déconnecter</a>
     </header>
     <h1>Bienvenue dans le panneau d'Agent</h1>
-    <!-- Boutons demandés pour le module de ton collègue -->
-    <button id="creer">Créer une séance</button>
-    <button id="historique">Historique des séances</button>
-    <button id="futur">Séances futures</button>
-
+    <button id="films" class="gros" type="button">Gérer les films</button>
+    <button id="salles" class="gros" type="button">Gérer les salles</button>
+    <button id="seances" class="gros" type="button">Gérer les séances</button>
+    <button id="reservations" class="gros" type="button">Gérer les réservations</button>
     <script>
-        const creer = document.getElementById("creer");
-        const historique = document.getElementById("historique");
-        const futur = document.getElementById("futur");
+        const films = document.getElementById("films");
+        const salles = document.getElementById("salles");
+        const seances = document.getElementById("seances");
+        const reservations = document.getElementById("reservations");
 
-        creer.addEventListener("click", () => {
-            location.href = "/seances/creer";
+        films.addEventListener("click", () => {
+            location.href = "/films";
         });
         
-        historique.addEventListener("click", () => {
-            location.href = "/seances/historique";
+        salles.addEventListener("click", () => {
+            location.href = "/seances/salles";
         });
         
-        futur.addEventListener("click", () => {
-            location.href = "/seances/futur";
+        seances.addEventListener("click", () => {
+            location.href = "/seances";
+        });
+
+        reservations.addEventListener("click", () => {
+            location.href = "/reservations";
         });
     </script>
 </body>

@@ -21,8 +21,7 @@ async function pageAdmin(req, res, next) {
 
 const creerAgent = async (req, res) => {
     const { nom, email, mot_de_passe } = req.body;
-    try {
-        const motDePasseHache = await bcrypt.hash(mot_de_passe, 10);
+    try {  const motDePasseHache = await bcrypt.hash(mot_de_passe, 10);
         await pool.execute(
             'INSERT INTO utilisateurs (nom, email, mot_de_passe, id_role) VALUES (?, ?, ?, 2)', 
             [nom, email, motDePasseHache]

@@ -15,7 +15,7 @@ async function pageModifierCompte(req, res, next) {
 
 async function infosCompte(req, res, next) {
     try {
-        const id = 1;
+        const id = parseInt(req.session.utilisateur.id);
         const [infos] = await pool.query(`SELECT nom, email FROM utilisateurs WHERE id = ?`, [id]);
         if (infos.length === 0) {
             throw new HttpError(404, "Compte introuvable.");
@@ -30,7 +30,7 @@ async function modifierCompte(req, res, next) {
     const { nom, email, mot_de_passe } = req.body;
     try {
         const motDePasseHache = await bcrypt.hash(mot_de_passe, 10);
-        const id = 1;
+        const id = parseInt(req.session.utilisateur.id);
         await pool.query(
             'UPDATE utilisateurs SET nom = ?, email = ?, mot_de_passe = ? WHERE id = ?', 
             [nom, email, motDePasseHache, id]
@@ -40,13 +40,5 @@ async function modifierCompte(req, res, next) {
         next(err);
     }
 }
-async function logout(req, res, next) {
-    try {
-        req.session.destroy();
-    }catch (err) {
-        next(err);
-    }
-    res.redirect("/auth");
-}
 
-module.exports = {infosCompte, modifierCompte, logout, pageModifierCompte};
+module.exports = {infosCompte, modifierCompte, pageModifierCompte};

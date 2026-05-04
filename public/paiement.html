@@ -35,8 +35,8 @@
             event.preventDefault();
 
             //  RÉCUPÉRATION DE L'ID DEPUIS L'URL
-            const params = new URLSearchParams(window.location.search);
-            const idResa = params.get('id');
+            const uris = location.pathname.split("/");
+const idResa = parseInt(uris[uris.length -1]);
             
             //   VALIDATION DE LA CARTE 
             const carte = document.getElementById('carte').value;
@@ -54,20 +54,20 @@
 
             //  ENVOI AU SERVEUR 
 
-            const reponse = await fetch('/paiements/simuler', {
+            const reponse = await fetch(`/paiements/simuler/${idResa}`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ montant: 15.00}) // Le montant pourrait aussi être dynamique plus tard
+                headers: { 'Content-Type': 'application/json' }
             });
 
-            if (reponse.ok) {
-                alert("Paiement réussi !");
-            }
             if (reponse.ok) {
             alert("Paiement réussi !");
 
             // Redirection vers le module 6 (Billet)
-            window.location.href = `/billet.html?id=${idResa}`;
+            await fetch(`/billets/${idResa}`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"}
+            });
+            window.location.href =`/billets/${idResa}`;
             } else {
             const data = await reponse.json();
             alert("Erreur : " + data.message);

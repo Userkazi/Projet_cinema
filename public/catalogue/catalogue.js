@@ -41,10 +41,8 @@ modifier.addEventListener("click", (event) => {
     location.href = "/compte/";
 });
 reservations.addEventListener("click", (event) => {
-    alert("Cette fonction n'est pas encore disponible.");
+    location.href = "/reservations";
 });
 logout.addEventListener("click", async (event) => {
-    await fetch("/compte/logout", {
-        method: "POST"
-    });
+    location.href = "/auth/logout";
 });

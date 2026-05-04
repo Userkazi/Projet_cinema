@@ -43,7 +43,6 @@ async function annulerReservation(req, res, next) {
         const reservationId = parseInt(req.params.reservationId);
         await pool.query(`UPDATE reservations SET statut = "annulé" WHERE id = ?`, [reservationId]);
         await pool.query(`DELETE FROM reservation_sieges WHERE id_reservation = ?;`, [reservationId]);
-        await pool.query(`DELETE FROM billets WHERE id_reservation = ?;`, [reservationId]);
         res.sendStatus(200);
     }catch (err) {
         next(err);

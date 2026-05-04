@@ -1,11 +1,8 @@
 const path = require("path");
 const pool = require('../db');
+const HttpError = require("./httpError");
 
-const pageIntrouvable = ((err, next) => {
-    if (err) {
-        next(new HttpError(404, "Page introuvable"));
-    }
-});
+const pageIntrouvable =require("../services/pageIntrouvable");
 const chemin = path.join(__dirname, "/../public");
 //Page d'paiement
 async function pagePaiement(req, res, next) {
@@ -16,11 +13,13 @@ async function pagePaiement(req, res, next) {
     }
 }
 
-const simulerPaiement = async (req, res) => {
-    const id_reservation= req.params.id;
-    const { montant} = req.body;
-
+const simulerPaiement = async (req, res, next) => {
+    const id_reservation= parseInt(req.params.reservationId);
     try {
+        const [infosReservation] = await pool.query(`SELECT seances.prix as prix from reservations INNER JOIN seances ON seances.id = reservations.id_seance WHERE reservations.id = ?;`, [id_reservation]);
+        const montantUnite = parseFloat(infosReservation[0].prix);
+        const [sieges] = await pool.query(`SELECT id_siege FROM reservation_sieges WHERE id_reservation = ?;`, [id_reservation]);
+        const montant = montantUnite * sieges.length;
         await pool.execute(
             'INSERT INTO paiements (montant, id_reservation) VALUES (?, ?)',
             [montant, id_reservation]
@@ -31,7 +30,7 @@ const simulerPaiement = async (req, res) => {
         );
         res.status(201).json({ message: "Paiement enregistré et réservation confirmée !", id_reservation});
     } catch (erreur) {
-        res.status(500).json({ message: "Erreur serveur lors de la transaction" });
+        next(erreur);
     }
 };
 

@@ -23,7 +23,7 @@ router.get('/profil', verifierSession, (req, res) => {
 
 router.get('/logout', (req, res) => {
     req.session.destroy();
-    res.redirect('/auth');
+    res.redirect('/auth/login');
 });
 
 // --- ROUTES POUR LES ACTIONS (ENVOI DE DONNÉES) ---

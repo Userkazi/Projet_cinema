@@ -49,7 +49,7 @@ tableau.addEventListener("click", async (event) => {
             alert("L'annulation' n'a pas pu être effectuée.");
         }
     }else if (event.target.classList.contains("affBillets")) {
-        location.href = `/reservations/${event.target.value}`;
+        location.href = `/billets/${event.target.value}`;
     }
 });
 retour.addEventListener("click", () => location.href = "/catalogue");

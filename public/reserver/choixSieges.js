@@ -83,7 +83,7 @@ form.addEventListener("submit", async (event) => {
             document.body.append(messageErreur);
         }else {
             const reservationId = data.reservationId;
-            location.href = `/payer/${reservationId}`;
+            location.href = `/paiements/${reservationId}`;
         }
     });
     retour.addEventListener("click", (event) => {

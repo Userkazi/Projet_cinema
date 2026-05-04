@@ -59,11 +59,11 @@
                     
                     // 8. LA REDIRECTION selon le rôle renvoyé par le backend
                     if (data.role === 1) { // 1 = Administrateur (selon notre SQL)
-                        window.location.href = '/admin.html';
+                        window.location.href = '/admin';
                     } else if (data.role === 2) { // 2 = Agent
-                        window.location.href = '/agent.html';
+                        window.location.href = '/agent';
                     } else if (data.role === 3) { // 3 = Client
-                        window.location.href = '/client.html';
+                        window.location.href = '/catalogue';
                     }
 
                 } else {

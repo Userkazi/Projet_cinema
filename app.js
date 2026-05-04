@@ -10,6 +10,7 @@ const reserver = require("./routes/reserverRoutes");
 const catalogue = require("./routes/catalogueRoutes");
 const compte = require("./routes/compteRoutes");
 const reservations = require("./routes/reservationsRoutes");
+const billets = require("./routes/billetsRoutes");
 
 //Configuration de la documentation swagger
 const options = {
@@ -33,6 +34,7 @@ app.use("/reserver", reserver);
 app.use("/catalogue", catalogue);
 app.use("/compte", compte);
 app.use("/reservations", reservations);
+app.use("/billets", billets);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode||500;

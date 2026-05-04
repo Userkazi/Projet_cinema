@@ -70,7 +70,7 @@ async function listeSieges(req,res, next) {
             FROM reservation_sieges
             INNER JOIN reservations ON reservations.id = reservation_sieges.id_reservation
             WHERE reservations.id_seance = ?;`, [seanceId]);
-            const listeSR = [2, 6, 8];
+            const listeSR = [];
             for (let i=0; i<siegesReserves.length; i++) {
                 listeSR.push(siegesReserves[i].id);
             }
@@ -90,7 +90,8 @@ async function listeSieges(req,res, next) {
 //Créer une réservation
 async function reserver(req, res, next) {
     try {
-        const userId = parseInt(req.session.utilisateur.id);
+        //const userId = parseInt(req.session.utilisateur.id);
+        const userId = 1;
         const seanceId = parseInt(req.body.seance);
         const sieges = req.body.sieges;
         const [reservation] = await pool.query(`

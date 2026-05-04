@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="UTF-8"><title>Mon Profil</title></head>
+<body>
+    <h1>Modifier mon profil</h1>
+    
+    <form id="form-profil">
+        <label>Nom :</label>
+        <input type="text" id="nom" required><br><br>
+        
+        <label>Email :</label>
+        <input type="email" id="email" required><br><br>
+        
+        <button type="submit">Enregistrer les modifications</button>
+    </form>
+    
+    <br>
+    <button id="btn-retour">Retour au tableau de bord</button>
+
+    <script>
+        // 1. Charger les données actuelles au démarrage de la page
+        async function chargerProfil() {
+            try {
+                const reponse = await fetch('/auth/me');
+                if (reponse.ok) {
+                    const data = await reponse.json();
+                    document.getElementById('nom').value = data.nom;
+                    document.getElementById('email').value = data.email;
+                    
+                    // On garde le rôle en mémoire pour le bouton de retour
+                    sessionStorage.setItem('roleUser', data.role);
+                } else {
+                    window.location.href = '/login.html';
+                }
+            } catch (erreur) {
+                console.error("Erreur de connexion");
+            }
+        }
+        chargerProfil();
+
+        // 2. Envoyer les modifications
+        document.getElementById('form-profil').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const nom = document.getElementById('nom').value;
+            const email = document.getElementById('email').value;
+
+            const reponse = await fetch('/auth/me', {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nom: nom, email: email })
+            });
+
+            const data = await reponse.json();
+            if (reponse.ok) {
+                alert(data.message);
+            } else {
+                alert("Erreur : " + data.message);
+            }
+        });
+
+        // 3. Bouton de retour intelligent
+        document.getElementById('btn-retour').addEventListener('click', () => {
+            const role = parseInt(sessionStorage.getItem('roleUser'));
+            if (role === 1) window.location.href = '/admin';
+            else if (role === 2) window.location.href = '/agent'; // Adapte avec ton URL exacte
+            else window.location.href = '/client'; // Adapte avec ton URL exacte
+        });
+    </script>
+</body>
+</html>

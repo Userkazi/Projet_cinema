@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Espace Agent</title>
+</head>
+<body>
+    <header> 
+        <a href="/auth/profil">Gérer mon profil</a>
+        <a href="/auth/logout">Se déconnecter</a>
+    </header>
+    <h1>Bienvenue dans le panneau d'Agent</h1>
+    <!-- Boutons demandés pour le module de ton collègue -->
+    <button id="creer">Créer une séance</button>
+    <button id="historique">Historique des séances</button>
+    <button id="futur">Séances futures</button>
+
+    <script>
+        const creer = document.getElementById("creer");
+        const historique = document.getElementById("historique");
+        const futur = document.getElementById("futur");
+
+        creer.addEventListener("click", () => {
+            location.href = "/seances/creer";
+        });
+        
+        historique.addEventListener("click", () => {
+            location.href = "/seances/historique";
+        });
+        
+        futur.addEventListener("click", () => {
+            location.href = "/seances/futur";
+        });
+    </script>
+</body>
+</html>

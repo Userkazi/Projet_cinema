@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Paiement Sécurisé</title>
+</head>
+<body>
+    <header> 
+        <a href="/auth/profil">Gérer mon profil</a>
+        <a href="/auth/logout">Se déconnecter</a>
+    </header>
+
+    <h2>Simuler un Paiement</h2>
+    <form id="form-paiement">
+        <input type="text" id="carte" placeholder="0000 0000 0000 0000" maxlength="19" required>
+        <input type="text" id="date_exp" placeholder="MM/YY" maxlength="5" required>
+        <input type="text" id="cvs" placeholder="123" maxlength="3" required>
+        <button type="submit">Payer</button>
+    </form>
+
+    <script>
+        // LOGIQUE DE FORMATAGE DE LA CARTE
+
+        const inputCarte = document.getElementById('carte');
+        
+        inputCarte.addEventListener('input', (e) => {
+            let texte = e.target.value.replace(/\D/g, '');
+            let texteEspace = texte.replace(/(\d{4})/g, '$1 ').trim();
+            e.target.value = texteEspace;
+        });
+
+        //  LOGIQUE DE SOUMISSION DU PAIEMENT 
+        
+        document.getElementById('form-paiement').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            //  RÉCUPÉRATION DE L'ID DEPUIS L'URL
+            const params = new URLSearchParams(window.location.search);
+            const idResa = params.get('id');
+            
+            //   VALIDATION DE LA CARTE 
+            const carte = document.getElementById('carte').value;
+            const regexCarte = new RegExp('^[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}$');
+
+            if (!idResa) {
+            alert("Erreur : Aucune réservation n'est spécifiée dans l'URL.");
+            return;
+            }
+
+            if (!regexCarte.test(carte)) {
+                alert("Erreur : La carte doit contenir 16 chiffres valides.");
+                return;
+            }
+
+            //  ENVOI AU SERVEUR 
+
+            const reponse = await fetch('/paiements/simuler', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ montant: 15.00}) // Le montant pourrait aussi être dynamique plus tard
+            });
+
+            if (reponse.ok) {
+                alert("Paiement réussi !");
+            }
+            if (reponse.ok) {
+            alert("Paiement réussi !");
+
+            // Redirection vers le module 6 (Billet)
+            window.location.href = `/billet.html?id=${idResa}`;
+            } else {
+            const data = await reponse.json();
+            alert("Erreur : " + data.message);
+            }
+        });
+    </script>
+</body>
+</html>

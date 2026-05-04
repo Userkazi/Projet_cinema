@@ -1,6 +1,8 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
+const path = require("path");
+const session= require('express-session');
 const swaggerUi = require(`swagger-ui-express`);
 const swaggerJsdoc = require("swagger-jsdoc");
 const port = process.env.PORT||3000;
@@ -11,6 +13,9 @@ const catalogue = require("./routes/catalogueRoutes");
 const compte = require("./routes/compteRoutes");
 const reservations = require("./routes/reservationsRoutes");
 const billets = require("./routes/billetsRoutes");
+const authRoutes= require('./routes/auth');
+const authAdmin= require('./routes/admin');
+const paiements = require('./routes/paiements');
 
 //Configuration de la documentation swagger
 const options = {
@@ -29,16 +34,25 @@ const swaggerSpec = swaggerJsdoc(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(express.json());
 app.use(express.static("public"));
+//app.use(express.static('public', { extensions: ['html'] })); //Pour lancer les routes,
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'ma_cle_super_secrete', 
+    resave: false,                                                
+    saveUninitialized: false                                     
+}));
 app.use("/seances", seances);
 app.use("/reserver", reserver);
 app.use("/catalogue", catalogue);
 app.use("/compte", compte);
 app.use("/reservations", reservations);
 app.use("/billets", billets);
+app.use('/auth',authRoutes);
+app.use('/admin', authAdmin);
+app.use('/paiements', paiements);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode||500;
     res.status(statusCode).json({message: err.message});
 });
 
-app.listen(port);
+app.listen(PORT, () => console.log(`Serveur lancé sur http://localhost:${PORT}`));

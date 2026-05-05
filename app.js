@@ -42,6 +42,7 @@ app.use(session({
     resave: false,                                                
     saveUninitialized: false                                     
 }));
+app.set('trust proxy', 1);
 app.get("/", (req, res, next) => res.redirect("/auth/login"));
 app.use("/seances", seances);
 app.use("/reserver", reserver);

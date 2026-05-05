@@ -8,7 +8,7 @@
     //password: process.env.DB_PASSWORD,
     //database: process.env.DB_NAME
 //});
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 const connection = mysql.createConnection(process.env.DATABASE_URL);
 
 

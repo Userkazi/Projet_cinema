@@ -17,6 +17,8 @@ const authRoutes= require('./routes/authRoutes');
 const authAdmin= require('./routes/adminRoutes');
 const paiements = require('./routes/paiementsRoutes');
 const agent = require("./routes/agentRoutes");
+const films = require("./routes/filmsRoutes");
+const salles = require("./routes/sallesRoutes");
 
 //Configuration de la documentation swagger
 const options = {
@@ -35,7 +37,6 @@ const swaggerSpec = swaggerJsdoc(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(express.json());
 app.use(express.static("public"));
-//app.use(express.static('public', { extensions: ['html'] })); //Pour lancer les routes,
 app.use(session({
     secret: process.env.SESSION_SECRET || 'ma_cle_super_secrete', 
     resave: false,                                                
@@ -51,6 +52,8 @@ app.use('/auth',authRoutes);
 app.use('/admin', authAdmin);
 app.use('/paiements', paiements);
 app.use("/agent", agent);
+app.use("/films", films);
+app.use("/salles", salles);
 
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode||500;

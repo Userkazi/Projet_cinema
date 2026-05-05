@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="cinema.css">
+    <title>Gestion des salles</title>
+</head>
+<body>
+
+<h1>Gestion des salles</h1>
+
+<form id="creerSalle" novalidate>
+
+    <p>Nom de la salle</p>
+    <input id="nom" name="nom" type="text"><br><br>
+
+    <p>Nombre de rangées</p>
+    <input id="rangees" name="rangees" type="text"><br><br>
+
+    <p>Sièges par rangée</p>
+    <input id="sieges" name="sieges" type="text"><br><br>
+
+    <button type="submit">Créer</button>
+
+</form>
+
+<br>
+<button id="afficher">Afficher les salles</button>
+
+<p id="msg"></p>
+<div id="liste"></div>
+
+<script src="salle.js"></script>
+
+</body>
+</html>

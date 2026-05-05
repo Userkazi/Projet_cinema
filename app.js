@@ -37,10 +37,15 @@ const swaggerSpec = swaggerJsdoc(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use(express.json());
 app.use(express.static("public"));
+app.set('trust proxy', 1);
 app.use(session({
     secret: process.env.SESSION_SECRET || 'ma_cle_super_secrete', 
     resave: false,                                                
-    saveUninitialized: false                                     
+    saveUninitialized: false,  
+    cookie: { 
+        secure: process.env.NODE_ENV === 'production', // true en ligne, false en local
+        maxAge: 24 * 60 * 60 * 1000 // 24 heures par exemple
+    }                                      
 }));
 app.get("/", (req, res, next) => res.redirect("/auth/login"));
 app.use("/seances", seances);

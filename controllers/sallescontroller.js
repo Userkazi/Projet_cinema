@@ -2,11 +2,7 @@ const path = require("path");
 const HttpError = require("./httpError");
 const pool = require("../db");
 
-const pageIntrouvable = ((err, next) => {
-    if (err) {
-        next(new HttpError(404, "Page introuvable"));
-    }
-});
+const pageIntrouvable = require("../services/pageIntrouvable");
 
 const chemin = path.join(__dirname, "../public/salles");
 
@@ -63,7 +59,7 @@ async function creer(req, res, next) {
     }
 }
 
-async function supprimer(req, res, next) {
+/*async function supprimer(req, res, next) {
     try {
         const id = parseInt(req.body.id);
 
@@ -76,6 +72,11 @@ async function supprimer(req, res, next) {
     } catch (err) {
         next(err);
     }
-}
+}*/
 
-module.exports = { pageGestion, listeSalles, creer, supprimer };
+module.exports = {
+     pageGestion,
+     listeSalles,
+     //supprimer,
+     creer
+};

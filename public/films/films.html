@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="cinema.css">
+    <link rel="stylesheet" href="/style.css">
     <title>Gestion des films</title>
 </head>
 <body>
@@ -12,23 +12,22 @@
 <form id="creerFilm" novalidate>
 
     <p>Titre</p>
-    <input id="titre" name="titre" type="text"><br><br>
+    <input id="titre" name="titre" type="text" required><br><br>
 
     <p>Résumé</p>
-    <input id="resume" name="resume" type="text"><br><br>
+    <input id="resume" name="resume" type="text" required><br><br>
 
-    <p>Durée</p>
-    <input id="duree" name="duree" type="text"><br><br>
+    <p>Durée (en minutes)</p>
+    <input id="duree" name="duree" type="number" required><br><br>
 
     <p>URL de l'affiche</p>
-    <input id="affiche_url" name="affiche_url" type="text"><br><br>
+    <input id="affiche_url" name="affiche_url" type="url" required><br><br>
 
     <p>Catégorie</p>
     <select id="id_categorie" name="id_categorie"></select><br><br>
 
     <p>Classification</p>
     <select id="classification" name="classification">
-        <option value="">Choisir</option>
         <option value="Tout public">Tout public</option>
         <option value="12+">12+</option>
         <option value="16+">16+</option>
@@ -45,7 +44,7 @@
 <p id="msg"></p>
 <div id="liste"></div>
 
-<script src="film.js"></script>
+<script src="/films/films.js"></script>
 
 </body>
 </html>

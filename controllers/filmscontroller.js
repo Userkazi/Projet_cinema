@@ -1,12 +1,13 @@
 const path = require("path");
 const HttpError = require("./httpError");
 const pool = require("../db");
+const pageIntrouvable = require("../services/pageIntrouvable");
 
-const chemin = path.join(__dirname, "../public/film");
+const chemin = path.join(__dirname, "../public/films");
 
 function pageGestion(req, res, next) {
     try {
-        res.sendFile(path.join(chemin, "films.html"));
+        res.sendFile(path.join(chemin, "films.html"), (err) => pageIntrouvable(err, next));
     } catch (err) {
         next(err);
     }
@@ -27,6 +28,9 @@ async function listeFilms(req, res, next) {
 async function listeCategories(req, res, next) {
     try {
         const [rows] = await pool.query("SELECT id, nom FROM categories");
+        if (rows.length === 0) {
+            throw new HttpError(404, "Aucune catégorie.");
+        }
         res.json(rows);
     } catch (err) {
         next(err);
@@ -58,7 +62,7 @@ async function creer(req, res, next) {
 }
 
 // SUPPRIMER FILM
-async function supprimer(req, res, next) {
+/*async function supprimer(req, res, next) {
     try {
         const id = parseInt(req.body.id);
 
@@ -66,14 +70,15 @@ async function supprimer(req, res, next) {
 
         res.status(204).end();
     } catch (err) {
+        console.log(err);
         next(err);
     }
-}
+}*/
 
 module.exports = {
     pageGestion,
     listeFilms,
     listeCategories,
     creer,
-    supprimer
+    //supprimer
 };

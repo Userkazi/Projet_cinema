@@ -1,7 +1,7 @@
 // 1. Vérifier si l'utilisateur est connecté
 const verifierSession = (req, res, next) => {
     if (!req.session.utilisateur) {
-        return res.redirect("/auth");
+        return res.redirect("/auth/login");
     }
     next(); // Il est connecté, on passe à la suite
 };

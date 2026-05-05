@@ -1,7 +1,7 @@
 function creerBouton(id) {
     const bouton = document.createElement("button");
     bouton.textContent = "Annuler la réservation";
-    bouton.className = `supprimer`;
+    bouton.className = `annuler`;
     bouton.value = id;
     return bouton;
 }

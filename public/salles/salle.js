@@ -43,8 +43,8 @@ async function chargerSalles() {
     const response = await fetch("/salles/liste");
     const salles = await response.json();
 
-    let html = "<table border='1' align='center'>";
-    html += "<tr><th>ID</th><th>Nom</th><th>Capacité totale</th><th>Action</th></tr>";
+    let html = "<table>";
+    html += "<tr><th>ID</th><th>Nom</th><th>Capacité totale</th></tr>";
 
     for (let i = 0; i < salles.length; i++) {
         html += `
@@ -52,7 +52,7 @@ async function chargerSalles() {
             <td>${salles[i].id}</td>
             <td>${salles[i].nom}</td>
             <td>${salles[i].capacite_totale}</td>
-            <td><button onclick="supprimerSalle(${salles[i].id})">Supprimer</button></td>
+            <!--<td><button onclick="supprimerSalle(${salles[i].id})">Supprimer</button></td>-->
         </tr>`;
     }
 
@@ -60,7 +60,7 @@ async function chargerSalles() {
     liste.innerHTML = html;
 }
 
-async function supprimerSalle(id) {
+/*async function supprimerSalle(id) {
     await fetch("/salles/supprimer", {
         method: "DELETE",
         headers: {
@@ -70,6 +70,6 @@ async function supprimerSalle(id) {
     });
 
     chargerSalles();
-}
+}*/
 
 afficher.addEventListener("click", chargerSalles);

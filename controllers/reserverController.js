@@ -54,7 +54,7 @@ async function listeSieges(req,res, next) {
             INNER JOIN salles ON salles.id = sieges.id_salle
             INNER JOIN seances ON seances.id_salle = salles.id
             WHERE seances.id = ?
-            ORDER BY sieges.rangee ASC, sieges.numero ASC;
+            ORDER BY CAST(sieges.rangee AS UNSIGNED) ASC, CAST(sieges.numero AS UNSIGNED) ASC;;
         `, [seanceId]);
         let nrangee = 0;
         const liste = [[]];

@@ -1,9 +1,10 @@
 const express = require(`express`);
 const router = express.Router();
-const controller = require("../controllers/billetsController");
+const {pageBillets, infosBillets, creerBillets} = require("../controllers/billetsController");
+const { verifierSession, verifierRole } = require('../middlewares/authMiddleware');
 
-router.get("/:reservationId", controller.pageBillets);
-router.get("/infos/:reservationId", controller.infosBillets);
-router.post("/:reservationId", controller.creerBillets);
+router.get("/:reservationId",verifierSession, verifierRole([3]), pageBillets);
+router.get("/infos/:reservationId", verifierSession, verifierRole([3]), infosBillets);
+router.post("/:reservationId",verifierSession, verifierRole([3]), creerBillets);
 
 module.exports = router;

@@ -42,6 +42,7 @@ app.use(session({
     resave: false,                                                
     saveUninitialized: false                                     
 }));
+app.get("/", (req, res, next) => res.redirect("/auth/login"));
 app.use("/seances", seances);
 app.use("/reserver", reserver);
 app.use("/catalogue", catalogue);

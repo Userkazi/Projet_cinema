@@ -1,12 +1,9 @@
 const pool = require('../db');
+const HttpError = require("./httpError");
 const bcrypt = require('bcrypt');
 const path = require('path');
 
-const pageIntrouvable = ((err, next) => {
-    if (err) {
-        next(new HttpError(404, "Page introuvable")); 
-    }
-});
+const pageIntrouvable = require("../services/pageIntrouvable");
 
 const chemin = path.join(__dirname, "/../public");
 
@@ -19,7 +16,7 @@ async function pageAdmin(req, res, next) {
 }
 
 
-const creerAgent = async (req, res) => {
+const creerAgent = async (req, res, next) => {
     const { nom, email, mot_de_passe } = req.body;
     try {  const motDePasseHache = await bcrypt.hash(mot_de_passe, 10);
         await pool.execute(
@@ -28,16 +25,19 @@ const creerAgent = async (req, res) => {
         );
         res.status(201).json({ message: "Agent de cinéma créé avec succès." });
     } catch (erreur) {
-        res.status(500).json({ message: "Erreur serveur." });
+        next(erreur);
     }
 };
 //Boutons de bascule et recuperation de liste des utilisateurs
-const getUtilisateurs = async (req, res) => {
+const getUtilisateurs = async (req, res, next) => {
     try {
-        const [users] = await pool.execute('SELECT id, nom, email, id_role FROM utilisateurs');
+        const [users] = await pool.execute('SELECT utilisateurs.id as id, utilisateurs.nom as nom, utilisateurs.email as email, roles.nom as role FROM utilisateurs INNER JOIN roles ON roles.id = utilisateurs.id_role;');
+        if (users.length === 0) {
+            throw new HttpError(404, "Aucun utilisateurs.");
+        }
         res.status(200).json(users);
     } catch (erreur) {
-        res.status(500).json({ message: "Erreur serveur" });
+        next(erreur);
     }
 };
 

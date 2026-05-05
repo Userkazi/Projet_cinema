@@ -2,9 +2,10 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
+    <link rel="stylesheet" href="/style.css">
     <title>Espace Administrateur</title>
 </head>
-<body style="display: none;"> 
+<body> 
     <header> 
         <a href="/auth/profil">Gérer mon profil</a>
         <a href="/auth/logout">Se déconnecter</a> 
@@ -28,36 +29,18 @@
     <!-- SECTION 2 : LISTE DES UTILISATEURS (Cachée par défaut) --> 
     <div id="section-liste" style="display: none;">
         <h2>Liste des utilisateurs actifs</h2>
-        <ul id="liste-users"></ul>
+        <table id="liste-users"></table>
+        <p id="msg"></p>
     </div>
 
     <script>
-        //  --- SCRIPT DE SÉCURITÉ DE LA PAGE ---
-        async function verifierAcces() {
-            try {
-                const reponse = await fetch('/auth/me');
-                if (!reponse.ok) {
-                    window.location.href = '/login.html';
-                } else {
-                    const data = await reponse.json();
-                    if (data.role !== 1) {
-                        window.location.href = '/login.html';
-                    } else {
-                        document.body.style.display = 'block';
-                    }
-                }
-            } catch (erreur) {
-                window.location.href = '/login.html';
-            }
-        }
-        verifierAcces();
 
         // --- SCRIPT DE BASCULE ET AFFICHAGE DES UTILISATEURS ---
         const btnCreer = document.getElementById('btn-creer-agent');
         const btnVoir = document.getElementById('btn-voir-users');
         const sectionCreation = document.getElementById('section-creation');
         const sectionListe = document.getElementById('section-liste');
-        const ulUsers = document.getElementById('liste-users');
+        const tableauUsers = document.getElementById('liste-users');
 
         btnCreer.addEventListener('click', () => {
             sectionCreation.style.display = 'block';
@@ -67,15 +50,23 @@
         btnVoir.addEventListener('click', async () => {
             sectionListe.style.display = 'block';
             sectionCreation.style.display = 'none';
-            ulUsers.innerHTML = ''; 
-
+            tableauUsers.innerHTML = '<tr><th>Identifiant</th><th>Nom</th><th>Email</th><th>Rôle</th></tr>';
             const reponse = await fetch('/admin/utilisateurs');
+            if (reponse.message) {
+                const msg = document.getElementById("msg");
+                msg.textContent = reponse.message;
+                return;
+            }
             if (reponse.ok) {
                 const utilisateurs = await reponse.json();
                 utilisateurs.forEach(user => {
-                    const li = document.createElement('li');
-                    li.textContent = `ID: ${user.id} | Nom: ${user.nom} | Email: ${user.email} | Rôle: ${user.id_role}`;
-                    ulUsers.appendChild(li);
+                    const row = document.createElement("tr");
+                    const tdId = document.createElement("td"); tdId.textContent = user.id;
+                    const tdNom = document.createElement("td"); tdNom.textContent = user.nom;
+                    const tdEmail = document.createElement("td"); tdEmail.textContent = user.email;
+                    const tdRole = document.createElement("td"); tdRole.textContent = user.role;
+                    row.append(tdId, tdNom, tdEmail, tdRole);
+                    tableauUsers.appendChild(row);
                 });
             }
         });

@@ -9,7 +9,7 @@
     //database: process.env.DB_NAME
 //});
 const mysql = require('mysql2/promise');
-const connection = mysql.createConnection(process.env.DATABASE_URL);
+const connection = mysql.createPool(process.env.DATABASE_URL);
 
 
 module.exports = connection;
